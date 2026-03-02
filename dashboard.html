@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHIELD-X Dashboard — CPX Protocol</title>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+.dash-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);}
+.content-grid{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--border);margin:16px;border:1px solid var(--border);}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin:0 16px 16px;border:1px solid var(--border);}
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:24px;}
+.gauge-score{font-size:56px;font-weight:300;color:var(--warn);}
+.gauge-bar{width:100%;height:8px;background:var(--border);border-radius:4px;margin:16px 0 8px;overflow:hidden;}
+.gauge-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--warn),var(--red));border-radius:4px;width:67%;}
+.gauge-range{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+.status-row{display:flex;justify-content:space-between;padding:10px 20px;border-top:1px solid var(--border);font-size:12px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">CPX <span>Protocol</span> / <span style="color:var(--muted)">SHIELD-X</span></a>
+  <div class="nav-links">
+    <div class="live-badge" style="margin-bottom:0;"><span class="dot"></span>BETA RESEARCH DEMO</div>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="color:var(--blue);">Live App ↗</a>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div style="padding-top:60px;">
+  <div style="padding:20px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:#fff;">
+    <div><h2 style="font-size:18px;">SHIELD-X Intelligence Dashboard</h2><p style="font-size:11px;color:var(--muted);margin-top:2px;">Behavioral Risk Observation — Model Output Only — Non-Advisory</p></div>
+    <div id="clock" style="font-size:12px;color:var(--muted);"></div>
+  </div>
+
+  <div class="dash-grid-4">
+    <div class="dash-metric-card"><div class="dash-metric-label">SHIELD-X Risk Score</div><div class="dash-metric-value warn">67.4</div><p style="font-size:11px;color:var(--red);margin-top:4px;">▲ +4.2 from prev session</p></div>
+    <div class="dash-metric-card"><div class="dash-metric-label">Total Liquidity Observed</div><div class="dash-metric-value blue">$2.41B</div><p style="font-size:11px;color:var(--red);margin-top:4px;">▼ –3.1% 24h</p></div>
+    <div class="dash-metric-card"><div class="dash-metric-label">Whale Moves (24h)</div><div class="dash-metric-value green">14</div><p style="font-size:11px;color:var(--green);margin-top:4px;">▲ +6 vs avg</p></div>
+    <div class="dash-metric-card"><div class="dash-metric-label">Stress Test Result</div><div class="dash-metric-value warn">MODERATE</div><p style="font-size:11px;color:var(--muted);margin-top:4px;">Simulated 30% drawdown</p></div>
+  </div>
+
+  <div class="content-grid">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Liquidity Monitor — 7D</span><span class="mock-tag">STRUCTURED MOCK DATA</span></div>
+      <div style="padding:20px;"><canvas id="liqChart" height="110"></canvas></div>
+      <div class="panel-header" style="border-top:1px solid var(--border);"><span class="panel-title">Risk Score History — 30D</span><span class="mock-tag">STRUCTURED MOCK DATA</span></div>
+      <div style="padding:20px;"><canvas id="riskChart" height="90"></canvas></div>
+    </div>
+    <div class="panel" style="border-left:1px solid var(--border);">
+      <div class="panel-header"><span class="panel-title">Risk Score Meter</span></div>
+      <div class="gauge-wrap">
+        <div class="gauge-score">67.4</div>
+        <p style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;">Elevated Risk Observed</p>
+        <div style="width:100%;">
+          <div class="gauge-bar"><div class="gauge-fill"></div></div>
+          <div class="gauge-range"><span>0 — Low</span><span>100 — Critical</span></div>
+        </div>
+      </div>
+      <div class="status-row"><span style="color:var(--muted);">Drawdown Risk</span><span style="color:var(--warn);font-weight:700;">ELEVATED</span></div>
+      <div class="status-row"><span style="color:var(--muted);">Cascade Probability</span><span style="color:var(--blue);font-weight:700;">22.4%</span></div>
+      <div class="status-row"><span style="color:var(--muted);">Volatility Index</span><span style="color:var(--green);font-weight:700;">NORMAL</span></div>
+      <div class="status-row"><span style="color:var(--muted);">Whale Pressure</span><span style="color:var(--warn);font-weight:700;">MEDIUM</span></div>
+    </div>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Whale Wallet Movement Feed</span><span class="mock-tag">MOCK DATA</span></div>
+      <table class="whale-table">
+        <thead><tr><th>Wallet</th><th>Action</th><th>Size</th><th>Asset</th><th>Time</th></tr></thead>
+        <tbody>
+          <tr><td class="addr">0x4f2a...b91c</td><td class="sell">SELL</td><td style="font-weight:700;">$14.2M</td><td>BTC</td><td style="color:var(--muted);">2m ago</td></tr>
+          <tr><td class="addr">0x8c1d...f44e</td><td class="buy">BUY</td><td style="font-weight:700;">$8.7M</td><td>ETH</td><td style="color:var(--muted);">7m ago</td></tr>
+          <tr><td class="addr">0x3a9f...2200</td><td class="sell">SELL</td><td style="font-weight:700;">$31.0M</td><td>BTC</td><td style="color:var(--muted);">12m ago</td></tr>
+          <tr><td class="addr">0x77bc...910a</td><td class="buy">BUY</td><td style="font-weight:700;">$5.1M</td><td>MATIC</td><td style="color:var(--muted);">18m ago</td></tr>
+          <tr><td class="addr">0x12ee...c3fa</td><td class="sell">SELL</td><td style="font-weight:700;">$19.8M</td><td>ETH</td><td style="color:var(--muted);">25m ago</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel" style="border-left:1px solid var(--border);">
+      <div class="panel-header"><span class="panel-title">Alert System Feed</span></div>
+      <div class="alert-item"><span style="font-size:14px;">🔴</span><div><span class="sev-tag sev-high">HIGH</span><div class="alert-msg">Large whale sell pressure detected — BTC $31M exit</div><div class="alert-time">12 min ago</div></div></div>
+      <div class="alert-item"><span style="font-size:14px;">🟡</span><div><span class="sev-tag sev-med">MED</span><div class="alert-msg">Risk score elevated above 65 threshold</div><div class="alert-time">34 min ago</div></div></div>
+      <div class="alert-item"><span style="font-size:14px;">🔵</span><div><span class="sev-tag sev-info">INFO</span><div class="alert-msg">Liquidity contraction observed — –3.1% 24h</div><div class="alert-time">1h 2m ago</div></div></div>
+      <div class="alert-item"><span style="font-size:14px;">🟡</span><div><span class="sev-tag sev-med">MED</span><div class="alert-msg">Cascade scenario probability crossed 20%</div><div class="alert-time">2h 15m ago</div></div></div>
+    </div>
+  </div>
+
+  <div style="margin:0 16px 16px;padding:12px 16px;background:var(--warn-light);border:1px solid #fde68a;border-radius:4px;font-size:11px;color:#92400e;">
+    ⚠️ <strong>Model Output Only:</strong> All data shown is structured mock data for research demonstration. SHIELD-X is not a financial advisor or trading service. For live intelligence, visit the <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" style="color:var(--blue);">SHIELD-X app</a>.
+  </div>
+</div>
+
+<script>
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toUTCString().slice(0,-4)+' UTC';},1000);
+Chart.defaults.color='#64748b'; Chart.defaults.borderColor='#e2e8f0';
+new Chart(document.getElementById('liqChart'),{type:'line',data:{labels:['Mar 24','Mar 25','Mar 26','Mar 27','Mar 28','Mar 29','Mar 30'],datasets:[{label:'Liquidity ($B)',data:[2.61,2.58,2.72,2.69,2.55,2.48,2.41],borderColor:'#1a56db',backgroundColor:'rgba(26,86,219,0.06)',borderWidth:1.5,pointRadius:3,fill:true,tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:'#e2e8f0'}},y:{grid:{color:'#e2e8f0'}}}}});
+new Chart(document.getElementById('riskChart'),{type:'line',data:{labels:Array.from({length:30},(_,i)=>'D'+(i+1)),datasets:[{label:'Risk Score',data:[42,45,43,48,51,49,53,55,52,58,61,59,62,60,64,63,67,65,68,66,65,69,67,70,68,65,63,66,67,67.4],borderColor:'#d97706',backgroundColor:'rgba(217,119,6,0.05)',borderWidth:1.5,pointRadius:0,fill:true,tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:'#e2e8f0'},ticks:{maxTicksLimit:6}},y:{grid:{color:'#e2e8f0'},min:30,max:100}}}});
+</script>
+</body>
+</html>

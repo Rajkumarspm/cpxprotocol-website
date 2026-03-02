@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact — CPX Protocol</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">CPX <span>Protocol</span></a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="research.html">Research</a>
+    <a href="about.html">About</a>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" class="nav-cta">Launch App ↗</a>
+  </div>
+</nav>
+<div style="padding-top:80px;">
+  <div class="section">
+    <div class="section-tag">Contact</div>
+    <h1 style="margin-bottom:16px;">Get In <span style="color:var(--blue);">Touch</span></h1>
+    <p style="font-size:13px;max-width:500px;margin-bottom:48px;">Business inquiries, API licensing interest, research partnerships, or press. We respond within 48 hours.</p>
+
+    <div class="grid-2" style="align-items:start;">
+      <div class="card">
+        <form id="contactForm" action="https://formspree.io/f/mlgwkqnv" method="POST">
+          <div class="form-row">
+            <div class="form-group"><label>Name *</label><input type="text" name="name" required placeholder="Your name"/></div>
+            <div class="form-group"><label>Email *</label><input type="email" name="email" required placeholder="your@email.com"/></div>
+          </div>
+          <div class="form-group"><label>Organization</label><input type="text" name="org" placeholder="Company / Exchange / Platform"/></div>
+          <div class="form-group"><label>Inquiry Type *</label>
+            <select name="type" required>
+              <option value="">Select...</option>
+              <option>Business Partnership</option>
+              <option>API Licensing Inquiry</option>
+              <option>Research Collaboration</option>
+              <option>Press / Media</option>
+              <option>Regulatory / Compliance</option>
+              <option>General</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message *</label><textarea name="message" required placeholder="Tell us about your inquiry..."></textarea></div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Send Message →</button>
+        </form>
+        <div id="success-msg" style="display:none;background:var(--green-light);border:1px solid #a7f3d0;padding:14px;border-radius:4px;color:var(--green);font-size:13px;margin-top:12px;">✓ Message sent. We'll respond within 48 hours.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="card">
+          <h4 style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Contact Channels</h4>
+          <div class="metric-row"><span class="label">Product</span><a href="mailto:shield-x@cpxprotocol.org" style="color:var(--blue);font-size:12px;font-weight:500;">shield-x@cpxprotocol.org</a></div>
+          <div class="metric-row"><span class="label">Foundation</span><a href="mailto:foundation@cpxprotocol.org" style="color:var(--blue);font-size:12px;font-weight:500;">foundation@cpxprotocol.org</a></div>
+          <div class="metric-row"><span class="label">Founder</span><a href="mailto:rajkumar@cpxprotocol.org" style="color:var(--blue);font-size:12px;font-weight:500;">rajkumar@cpxprotocol.org</a></div>
+          <div class="metric-row"><span class="label">Location</span><span class="value">Vellore, Tamil Nadu, India</span></div>
+        </div>
+        <div class="card">
+          <h4 style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Entity Details</h4>
+          <div class="metric-row"><span class="label">Entity</span><span class="value">CPX Protocol Research Unit</span></div>
+          <div class="metric-row"><span class="label">Type</span><span class="value">MSME Proprietorship</span></div>
+          <div class="metric-row"><span class="label">UDYAM</span><span class="value">TN-30-0110119</span></div>
+          <div class="metric-row"><span class="label">Regulatory</span><span class="value blue">FIU-IND Pending</span></div>
+        </div>
+        <div class="card">
+          <h4 style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Social & Code</h4>
+          <div class="metric-row"><span class="label">LinkedIn</span><a href="https://linkedin.com/in/raj-kumar" target="_blank" style="color:var(--blue);font-size:12px;">raj-kumar</a></div>
+          <div class="metric-row"><span class="label">Twitter/X</span><a href="https://twitter.com/rajkumar_spm" target="_blank" style="color:var(--blue);font-size:12px;">@rajkumar_spm</a></div>
+          <div class="metric-row"><span class="label">GitHub</span><a href="https://github.com/Rajkumarspm/shield-x" target="_blank" style="color:var(--blue);font-size:12px;">Rajkumarspm/shield-x</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-bottom" style="border-top:none;"><p>© 2025 CPX Protocol Research Unit · MSME: UDYAM-TN-30-0110119 · Vellore, Tamil Nadu, India</p><a href="index.html" style="font-size:11px;color:var(--blue);">← Back to Home</a></div>
+  </div>
+</footer>
+<script>
+document.getElementById('contactForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=this.querySelector('button');
+  btn.textContent='Sending...';
+  try{const r=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{Accept:'application/json'}});
+  if(r.ok){document.getElementById('success-msg').style.display='block';this.reset();}}catch(e){}
+  btn.textContent='Send Message →';
+});
+</script>
+</body>
+</html>
