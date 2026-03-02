@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHIELD-X Dashboard — CPX Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #050810; --surface: #090e1a; --border: #1a2235;
+    --accent: #00d4ff; --accent2: #0066ff; --accent3: #00ff88;
+    --text: #e8edf5; --muted: #5a6a85; --danger: #ff4455; --warn: #ffaa00;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; font-size:14px; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image: linear-gradient(rgba(0,212,255,0.02) 1px,transparent 1px), linear-gradient(90deg,rgba(0,212,255,0.02) 1px,transparent 1px);
+    background-size:40px 40px; pointer-events:none; z-index:0;
+  }
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 32px; height:56px;
+    background:rgba(5,8,16,0.95); backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:16px; color:var(--accent); text-decoration:none; }
+  .nav-logo span { color:var(--text); }
+  .nav-right { display:flex; align-items:center; gap:16px; }
+  .nav-right a { color:var(--muted); text-decoration:none; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; transition:color 0.2s; }
+  .nav-right a:hover { color:var(--accent); }
+  .live-badge {
+    display:flex; align-items:center; gap:6px;
+    background:rgba(0,255,136,0.1); border:1px solid rgba(0,255,136,0.3);
+    padding:4px 12px; border-radius:100px;
+    font-size:11px; font-family:'DM Mono',monospace; color:var(--accent3);
+  }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:var(--accent3); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .main { padding:72px 0 40px; min-height:100vh; position:relative; z-index:1; }
+  .dash-header {
+    padding:24px 32px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .dash-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:700; }
+  .dash-sub { font-size:12px; color:var(--muted); font-family:'DM Mono',monospace; margin-top:2px; }
+  .time-display { font-family:'DM Mono',monospace; font-size:13px; color:var(--muted); }
+
+  .dash-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
+  .metric-card { background:var(--surface); padding:20px 24px; }
+  .metric-label { font-size:10px; color:var(--muted); letter-spacing:0.15em; text-transform:uppercase; font-family:'DM Mono',monospace; margin-bottom:8px; }
+  .metric-value { font-family:'DM Mono',monospace; font-size:24px; font-weight:500; }
+  .metric-value.green { color:var(--accent3); }
+  .metric-value.blue { color:var(--accent); }
+  .metric-value.red { color:var(--danger); }
+  .metric-value.warn { color:var(--warn); }
+  .metric-change { font-size:11px; margin-top:4px; font-family:'DM Mono',monospace; }
+  .metric-change.up { color:var(--accent3); }
+  .metric-change.down { color:var(--danger); }
+
+  .content-grid { display:grid; grid-template-columns:2fr 1fr; gap:1px; background:var(--border); margin:1px; }
+  .panel { background:var(--surface); }
+  .panel-header {
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .panel-title { font-size:12px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-family:'DM Mono',monospace; color:var(--muted); }
+  .panel-tag { font-size:10px; font-family:'DM Mono',monospace; padding:3px 10px; border-radius:100px; }
+  .tag-mock { background:rgba(255,170,0,0.1); color:var(--warn); border:1px solid rgba(255,170,0,0.3); }
+  .panel-body { padding:20px; }
+
+  /* Risk Gauge */
+  .gauge-wrap { display:flex; flex-direction:column; align-items:center; padding:24px 0; }
+  .gauge-score { font-family:'DM Mono',monospace; font-size:56px; font-weight:300; color:var(--warn); }
+  .gauge-label { font-size:11px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px; }
+  .gauge-bar { width:100%; height:8px; background:var(--border); border-radius:4px; margin:16px 0 8px; overflow:hidden; }
+  .gauge-fill { height:100%; background:linear-gradient(90deg,var(--accent3),var(--warn),var(--danger)); border-radius:4px; width:67%; }
+  .gauge-range { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; }
+
+  /* Whale Table */
+  .whale-table { width:100%; border-collapse:collapse; }
+  .whale-table th { font-size:10px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; font-family:'DM Mono',monospace; text-align:left; padding:8px 12px; border-bottom:1px solid var(--border); }
+  .whale-table td { padding:10px 12px; border-bottom:1px solid rgba(26,34,53,0.5); font-family:'DM Mono',monospace; font-size:12px; }
+  .whale-table tr:last-child td { border-bottom:none; }
+  .whale-table tr:hover td { background:rgba(0,212,255,0.03); }
+  .addr { color:var(--muted); }
+  .buy { color:var(--accent3); }
+  .sell { color:var(--danger); }
+  .whale-size { color:var(--accent); }
+
+  /* Alert Feed */
+  .alert-feed { display:flex; flex-direction:column; gap:1px; }
+  .alert-item { padding:12px 20px; border-bottom:1px solid var(--border); display:flex; gap:12px; align-items:flex-start; }
+  .alert-item:last-child { border-bottom:none; }
+  .alert-icon { font-size:14px; margin-top:1px; flex-shrink:0; }
+  .alert-content { flex:1; }
+  .alert-msg { font-size:13px; color:var(--text); }
+  .alert-time { font-size:10px; color:var(--muted); font-family:'DM Mono',monospace; margin-top:2px; }
+  .alert-sev { font-size:10px; font-family:'DM Mono',monospace; padding:2px 8px; border-radius:100px; float:right; }
+  .sev-high { background:rgba(255,68,85,0.1); color:var(--danger); }
+  .sev-med { background:rgba(255,170,0,0.1); color:var(--warn); }
+  .sev-low { background:rgba(0,212,255,0.1); color:var(--accent); }
+
+  .bottom-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); margin:1px 1px 0; }
+
+  .disclaimer {
+    margin:16px; padding:12px 16px;
+    background:rgba(255,68,85,0.04); border:1px solid rgba(255,68,85,0.15);
+    border-radius:4px; font-size:11px; color:var(--muted); line-height:1.6;
+  }
+
+  canvas { max-width:100%; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">CPX<span> Protocol</span> / <span style="color:var(--muted)">SHIELD-X</span></a>
+  <div class="nav-right">
+    <div class="live-badge"><span class="live-dot"></span>BETA RESEARCH DEMO</div>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="color:var(--accent)">Launch Live App ↗</a>
+    <a href="index.html">Home</a>
+    <a href="research.html">Research</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="dash-header">
+    <div>
+      <div class="dash-title">SHIELD-X Intelligence Dashboard</div>
+      <div class="dash-sub">Behavioral Risk Observation — Model Output Only — Non-Advisory</div>
+    </div>
+    <div class="time-display" id="clock">—</div>
+  </div>
+
+  <!-- TOP METRICS -->
+  <div class="dash-grid">
+    <div class="metric-card">
+      <div class="metric-label">SHIELD-X Risk Score</div>
+      <div class="metric-value warn">67.4</div>
+      <div class="metric-change down">▲ +4.2 from prev session</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Total Liquidity Observed</div>
+      <div class="metric-value blue">$2.41B</div>
+      <div class="metric-change down">▼ –3.1% 24h</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Whale Moves (24h)</div>
+      <div class="metric-value green">14</div>
+      <div class="metric-change up">▲ +6 vs avg</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Stress Test Result</div>
+      <div class="metric-value warn">MODERATE</div>
+      <div class="metric-change" style="color:var(--muted)">Simulated 30% drawdown scenario</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content-grid">
+    <!-- Left: Charts -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Liquidity Monitor — 7D</span>
+        <span class="panel-tag tag-mock">STRUCTURED MOCK DATA</span>
+      </div>
+      <div class="panel-body">
+        <canvas id="liquidityChart" height="120"></canvas>
+      </div>
+      <div class="panel-header" style="margin-top:1px;border-top:1px solid var(--border)">
+        <span class="panel-title">Risk Score History — 30D</span>
+        <span class="panel-tag tag-mock">STRUCTURED MOCK DATA</span>
+      </div>
+      <div class="panel-body">
+        <canvas id="riskChart" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- Right: Gauge + Status -->
+    <div class="panel" style="border-left:1px solid var(--border)">
+      <div class="panel-header">
+        <span class="panel-title">Risk Score Meter</span>
+      </div>
+      <div class="panel-body" style="padding:0">
+        <div class="gauge-wrap">
+          <div class="gauge-score">67.4</div>
+          <div class="gauge-label">Elevated Risk Observed</div>
+          <div style="width:100%;padding:0 20px">
+            <div class="gauge-bar"><div class="gauge-fill"></div></div>
+            <div class="gauge-range"><span>0 — Low</span><span>100 — Critical</span></div>
+          </div>
+        </div>
+        <div style="padding:0 20px 20px; display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;">
+            <span style="color:var(--muted)">Drawdown Risk</span><span style="color:var(--warn)">ELEVATED</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;">
+            <span style="color:var(--muted)">Cascade Probability</span><span style="color:var(--accent)">22.4%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;">
+            <span style="color:var(--muted)">Volatility Index</span><span style="color:var(--accent3)">NORMAL</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:12px;">
+            <span style="color:var(--muted)">Whale Pressure</span><span style="color:var(--warn)">MEDIUM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHALE TABLE + ALERTS -->
+  <div class="bottom-grid">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Whale Wallet Movement Feed</span>
+        <span class="panel-tag tag-mock">MOCK DATA</span>
+      </div>
+      <div class="panel-body" style="padding:0">
+        <table class="whale-table">
+          <thead>
+            <tr>
+              <th>Wallet</th>
+              <th>Action</th>
+              <th>Size</th>
+              <th>Asset</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="addr">0x4f2a...b91c</td><td class="sell">SELL</td><td class="whale-size">$14.2M</td><td>BTC</td><td style="color:var(--muted)">2m ago</td></tr>
+            <tr><td class="addr">0x8c1d...f44e</td><td class="buy">BUY</td><td class="whale-size">$8.7M</td><td>ETH</td><td style="color:var(--muted)">7m ago</td></tr>
+            <tr><td class="addr">0x3a9f...2200</td><td class="sell">SELL</td><td class="whale-size">$31.0M</td><td>BTC</td><td style="color:var(--muted)">12m ago</td></tr>
+            <tr><td class="addr">0x77bc...910a</td><td class="buy">BUY</td><td class="whale-size">$5.1M</td><td>MATIC</td><td style="color:var(--muted)">18m ago</td></tr>
+            <tr><td class="addr">0x12ee...c3fa</td><td class="sell">SELL</td><td class="whale-size">$19.8M</td><td>ETH</td><td style="color:var(--muted)">25m ago</td></tr>
+            <tr><td class="addr">0x9b4a...d712</td><td class="buy">BUY</td><td class="whale-size">$2.3M</td><td>BTC</td><td style="color:var(--muted)">31m ago</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel" style="border-left:1px solid var(--border)">
+      <div class="panel-header">
+        <span class="panel-title">Alert System Feed</span>
+      </div>
+      <div class="alert-feed">
+        <div class="alert-item">
+          <div class="alert-icon">🔴</div>
+          <div class="alert-content">
+            <span class="alert-sev sev-high">HIGH</span>
+            <div class="alert-msg">Large whale sell pressure detected — BTC $31M exit</div>
+            <div class="alert-time">12 min ago</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon">🟡</div>
+          <div class="alert-content">
+            <span class="alert-sev sev-med">MED</span>
+            <div class="alert-msg">Risk score elevated above 65 threshold</div>
+            <div class="alert-time">34 min ago</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon">🔵</div>
+          <div class="alert-content">
+            <span class="alert-sev sev-low">INFO</span>
+            <div class="alert-msg">Liquidity contraction observed — –3.1% 24h</div>
+            <div class="alert-time">1h 2m ago</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon">🟡</div>
+          <div class="alert-content">
+            <span class="alert-sev sev-med">MED</span>
+            <div class="alert-msg">Cascade scenario probability crossed 20%</div>
+            <div class="alert-time">2h 15m ago</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-icon">🔵</div>
+          <div class="alert-content">
+            <span class="alert-sev sev-low">INFO</span>
+            <div class="alert-msg">Stress test simulation completed — MODERATE</div>
+            <div class="alert-time">3h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Model Output Only:</strong> All data shown is structured mock data for research demonstration purposes. SHIELD-X is not a financial advisor, broker, or trading service. This dashboard does not constitute investment advice. Users are solely responsible for all decisions. For live intelligence, visit the <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" style="color:var(--accent)">SHIELD-X app</a>.
+  </div>
+</div>
+
+<script>
+// Clock
+setInterval(()=>{ document.getElementById('clock').textContent = new Date().toUTCString().slice(0,-4)+' UTC'; }, 1000);
+
+// Chart defaults
+Chart.defaults.color = '#5a6a85';
+Chart.defaults.borderColor = '#1a2235';
+
+// Liquidity Chart
+const lCtx = document.getElementById('liquidityChart').getContext('2d');
+const days = ['Mar 24','Mar 25','Mar 26','Mar 27','Mar 28','Mar 29','Mar 30'];
+new Chart(lCtx, {
+  type: 'line',
+  data: {
+    labels: days,
+    datasets: [{
+      label: 'Total Liquidity ($B)',
+      data: [2.61, 2.58, 2.72, 2.69, 2.55, 2.48, 2.41],
+      borderColor: '#00d4ff',
+      backgroundColor: 'rgba(0,212,255,0.06)',
+      borderWidth: 1.5,
+      pointRadius: 3,
+      pointBackgroundColor: '#00d4ff',
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: { plugins:{ legend:{display:false} }, scales:{ x:{grid:{color:'#1a2235'}}, y:{grid:{color:'#1a2235'}} } }
+});
+
+// Risk Chart
+const rCtx = document.getElementById('riskChart').getContext('2d');
+const rDays = Array.from({length:30},(_,i)=>`D${i+1}`);
+const rData = [42,45,43,48,51,49,53,55,52,58,61,59,62,60,64,63,67,65,68,66,65,69,67,70,68,65,63,66,67,67.4];
+new Chart(rCtx, {
+  type: 'line',
+  data: {
+    labels: rDays,
+    datasets: [{
+      label: 'Risk Score',
+      data: rData,
+      borderColor: '#ffaa00',
+      backgroundColor: 'rgba(255,170,0,0.05)',
+      borderWidth: 1.5,
+      pointRadius: 0,
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    plugins:{ legend:{display:false} },
+    scales:{
+      x:{grid:{color:'#1a2235'}, ticks:{maxTicksLimit:6}},
+      y:{grid:{color:'#1a2235'}, min:30, max:100}
+    }
+  }
+});
+</script>
+</body>
+</html>

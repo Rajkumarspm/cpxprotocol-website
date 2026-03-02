@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CPX Protocol — Economic Security Layer</title>
+<meta name="description" content="CPX Protocol is the economic security layer. SHIELD-X is the operational risk intelligence engine for retail traders."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --bg: #050810;
+    --surface: #090e1a;
+    --border: #1a2235;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --accent3: #00ff88;
+    --text: #e8edf5;
+    --muted: #5a6a85;
+    --danger: #ff4455;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+  .mono { font-family: 'DM Mono', monospace; }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600 !important;
+  }
+  .nav-cta:hover { background: #00b8d9 !important; color: #000 !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(0,212,255,0.3);
+    background: rgba(0,212,255,0.05);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 32px;
+    letter-spacing: 0.1em;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    max-width: 900px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero h1 .accent2 { color: var(--accent3); }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: #00b8d9; transform: translateY(-1px); }
+  .btn-secondary {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.02);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* STATS BAR */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 24px 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .stat-item {
+    text-align: center;
+    padding: 16px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .section-body {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 560px;
+  }
+
+  /* PROBLEM SECTION */
+  .problem { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .problem-cards { display: flex; flex-direction: column; gap: 16px; }
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--danger);
+    padding: 20px 24px;
+    border-radius: 4px;
+  }
+  .problem-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+  .problem-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* SOLUTION */
+  .solution { padding: 100px 40px; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .solution-inner { max-width: 1200px; margin: 0 auto; }
+  .solution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+  .solution-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 32px;
+    border-radius: 6px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .solution-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .solution-card .icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+  .solution-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+  .solution-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* HOW IT WORKS */
+  .how { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 60px; position: relative; }
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 12.5%; right: 12.5%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    z-index: 0;
+  }
+  .step { text-align: center; padding: 0 16px; position: relative; z-index: 1; }
+  .step-num {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+    margin: 0 auto 20px;
+  }
+  .step h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .step p { font-size: 13px; color: var(--muted); }
+
+  /* BUSINESS MODEL */
+  .biz { padding: 100px 40px; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .biz-inner { max-width: 1200px; margin: 0 auto; }
+  .biz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 60px; }
+  .biz-phases { display: flex; flex-direction: column; gap: 0; }
+  .biz-phase {
+    display: flex; gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .biz-phase:last-child { border-bottom: none; }
+  .phase-marker {
+    flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
+  .phase-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 6px;
+  }
+  .phase-line { width: 1px; flex: 1; background: var(--border); min-height: 40px; margin-top: 8px; }
+  .biz-phase:last-child .phase-line { display: none; }
+  .phase-content h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--accent); font-family: 'DM Mono', monospace; }
+  .phase-content h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .phase-content p { font-size: 13px; color: var(--muted); }
+  .biz-right { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
+  .biz-metric {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    border-radius: 4px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .biz-metric .label { font-size: 13px; color: var(--muted); }
+  .biz-metric .value { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--accent3); font-weight: 500; }
+
+  /* ROADMAP */
+  .roadmap { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+  .roadmap-track { margin-top: 60px; display: flex; flex-direction: column; gap: 0; }
+  .roadmap-item {
+    display: grid; grid-template-columns: 140px 1px 1fr;
+    gap: 0 24px;
+    min-height: 80px;
+  }
+  .roadmap-date {
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 4px;
+    padding-right: 24px;
+  }
+  .roadmap-line {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .roadmap-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .roadmap-dot.done { background: var(--accent3); border-color: var(--accent3); }
+  .roadmap-dot.active { background: var(--accent); animation: pulse 2s infinite; }
+  .roadmap-connector { width: 1px; flex: 1; background: var(--border); margin: 4px 0; }
+  .roadmap-content { padding-bottom: 32px; padding-left: 24px; }
+  .roadmap-content h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .roadmap-content p { font-size: 13px; color: var(--muted); }
+  .roadmap-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 10px;
+    border-radius: 100px;
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+  }
+  .tag-done { background: rgba(0,255,136,0.1); color: var(--accent3); }
+  .tag-live { background: rgba(0,212,255,0.1); color: var(--accent); }
+  .tag-pending { background: rgba(90,106,133,0.2); color: var(--muted); }
+
+  /* FOUNDER */
+  .founder { padding: 100px 40px; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .founder-inner { max-width: 1200px; margin: 0 auto; }
+  .founder-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; align-items: center; margin-top: 60px; }
+  .founder-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .founder-avatar {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: #000;
+  }
+  .founder-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .founder-card .title { font-size: 12px; color: var(--accent); font-family: 'DM Mono', monospace; letter-spacing: 0.1em; margin-bottom: 20px; }
+  .founder-card .location { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .founder-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .founder-link {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .founder-link:hover { border-color: var(--accent); color: var(--accent); }
+  .founder-bio { display: flex; flex-direction: column; gap: 24px; }
+  .founder-bio p { color: var(--muted); font-size: 15px; line-height: 1.8; }
+  .founder-bio p strong { color: var(--text); }
+  .founder-values { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+  .value-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 2px solid var(--accent);
+  }
+
+  /* CONTACT */
+  .contact { padding: 100px 40px; max-width: 800px; margin: 0 auto; text-align: center; }
+  .contact-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+    border-radius: 6px;
+    margin-top: 48px;
+    text-align: left;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .form-group label { font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .form-group input, .form-group textarea, .form-group select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea { min-height: 120px; }
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+    font-family: 'Syne', sans-serif;
+  }
+  .form-submit:hover { background: #00b8d9; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 48px 40px 32px;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 40px; }
+  .footer-brand h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 240px; }
+  .footer-col h4 { font-size: 12px; color: var(--text); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+  .legal-note {
+    background: rgba(255,68,85,0.05);
+    border: 1px solid rgba(255,68,85,0.2);
+    padding: 16px 24px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .problem-grid, .solution-grid, .biz-grid, .founder-grid, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .contact-form { padding: 28px 20px; }
+    section, .problem, .how, .roadmap { padding: 60px 20px; }
+    .solution, .biz, .founder { padding: 60px 20px; }
+    .hero { padding: 100px 20px 60px; }
+  }
+
+  /* Animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">CPX<span> Protocol</span></a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="research.html">Research</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" class="nav-cta">Launch SHIELD-X ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    SHIELD-X LIVE — Phase 0 Research Demo
+  </div>
+  <h1>
+    The <span class="accent">Economic</span><br/>
+    Security <span class="accent2">Layer</span> for<br/>
+    Retail <span class="accent">Traders</span>
+  </h1>
+  <p class="hero-sub">
+    CPX Protocol builds behavioral risk infrastructure. SHIELD-X is the operational risk intelligence engine — free, transparent, and built for the trader who deserves better tools.
+  </p>
+  <div class="hero-actions">
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" class="btn-primary">
+      Open SHIELD-X ↗
+    </a>
+    <a href="research.html" class="btn-secondary">Read Research</a>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-value">5</span>
+    <span class="stat-label">Modules Live</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">0</span>
+    <span class="stat-label">User Data Collected</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">Free</span>
+    <span class="stat-label">Always</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-value">FIU-IND</span>
+    <span class="stat-label">Registration In Progress</span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="problem fade-in">
+  <div class="problem-grid">
+    <div>
+      <div class="section-tag">The Problem</div>
+      <h2 class="section-title">Retail Traders Are Structurally Unprotected</h2>
+      <p class="section-body">
+        In volatile digital asset markets, retail participants face sophisticated risks they cannot observe in real time. Institutional tools exist. Retail tools don't. CPX Protocol exists to close this gap — permanently.
+      </p>
+    </div>
+    <div class="problem-cards">
+      <div class="problem-card">
+        <h4>Invisible Capital Erosion</h4>
+        <p>Drawdown compounds silently. Most retail traders cannot observe risk accumulation until capital is already lost.</p>
+      </div>
+      <div class="problem-card">
+        <h4>No Behavioral Risk Layer</h4>
+        <p>Existing tools focus on price. None model behavioral patterns, position sizing risk, or cascade scenarios in real time.</p>
+      </div>
+      <div class="problem-card">
+        <h4>Information Asymmetry</h4>
+        <p>Institutional participants access risk intelligence that retail traders simply cannot afford or access.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SOLUTION -->
+<div class="solution fade-in">
+  <div class="solution-inner">
+    <div class="section-tag">The Solution</div>
+    <h2 class="section-title">SHIELD-X: Operational Risk Intelligence</h2>
+    <p class="section-body">
+      A free, non-advisory behavioral observation platform that gives retail traders institutional-grade risk awareness. No custody. No advice. Pure intelligence.
+    </p>
+    <div class="solution-grid">
+      <div class="solution-card">
+        <div class="icon">⚡</div>
+        <h3>Behavioral Risk Scoring</h3>
+        <p>Multi-factor risk models observe position behavior, drawdown trajectory, and market stress indicators in real time.</p>
+      </div>
+      <div class="solution-card">
+        <div class="icon">🐋</div>
+        <h3>Market Intelligence Layer</h3>
+        <p>Whale wallet movement analysis, liquidity monitoring, and cascade scenario modeling — all in one interface.</p>
+      </div>
+      <div class="solution-card">
+        <div class="icon">🛡</div>
+        <h3>Zero Data Architecture</h3>
+        <p>SHIELD-X collects no user data. No accounts. No personal information. The tool observes markets, not users.</p>
+      </div>
+      <div class="solution-card">
+        <div class="icon">📊</div>
+        <h3>Structured Position Ladder</h3>
+        <p>Advanced position scaling models that help traders understand risk-adjusted entry frameworks through simulation.</p>
+      </div>
+      <div class="solution-card">
+        <div class="icon">🔬</div>
+        <h3>Research-Grade Output</h3>
+        <p>All outputs are model-generated indicators. Non-advisory. Non-enforced. The user decides, always.</p>
+      </div>
+      <div class="solution-card">
+        <div class="icon">🌐</div>
+        <h3>Regulatory Pathway</h3>
+        <p>FIU-IND registration in progress. Every architectural decision is made with compliance-first methodology.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how fade-in">
+  <div class="section-tag">How It Works</div>
+  <h2 class="section-title">From Signal to Intelligence</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h4>Market Data Ingestion</h4>
+      <p>Live price, volume, and on-chain data streams are ingested into the analysis engine.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h4>Behavioral Analysis</h4>
+      <p>Multi-layer models process data for risk score generation, drawdown detection, and pattern classification.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h4>Intelligence Output</h4>
+      <p>Risk scores, alerts, and simulation outputs are presented — clearly framed as model outputs only.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h4>User Decides</h4>
+      <p>Zero enforcement. Zero advice. The trader receives intelligence and retains 100% decision authority.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BUSINESS MODEL -->
+<div class="biz fade-in">
+  <div class="biz-inner">
+    <div class="section-tag">Business Model</div>
+    <h2 class="section-title">Built to Scale. Built to Last.</h2>
+    <div class="biz-grid">
+      <div class="biz-phases">
+        <div class="biz-phase">
+          <div class="phase-marker">
+            <div class="phase-dot" style="background:var(--accent3)"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <h4>Phase 0 — Now</h4>
+            <h3>Free Public Tool</h3>
+            <p>SHIELD-X is free for all retail traders. No monetization. Pure mission: democratize risk intelligence. Donation optional.</p>
+          </div>
+        </div>
+        <div class="biz-phase">
+          <div class="phase-marker">
+            <div class="phase-dot" style="background:var(--accent)"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <h4>Phase 1 — Post FIU-IND</h4>
+            <h3>API Licensing (B2B)</h3>
+            <p>Risk intelligence API licensed to brokers, fintech platforms, and crypto exchanges. Recurring revenue model.</p>
+          </div>
+        </div>
+        <div class="biz-phase">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <h4>Phase 2</h4>
+            <h3>SaaS — Institutional Tier</h3>
+            <p>Premium dashboard access for institutional research desks. Enhanced data feeds, priority alerting, custom modules.</p>
+          </div>
+        </div>
+        <div class="biz-phase">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+          </div>
+          <div class="phase-content">
+            <h4>Phase 3</h4>
+            <h3>CPX Token Ecosystem</h3>
+            <p>Post-regulatory approval: CPX token integrated as utility layer for access, governance, and incentive alignment. FIU-IND compliant.</p>
+          </div>
+        </div>
+      </div>
+      <div class="biz-right">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">Current Platform Metrics</div>
+        <div class="biz-metric">
+          <span class="label">Tool Access</span>
+          <span class="value">Free — No Paywall</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">Data Collection</span>
+          <span class="value">Zero</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">Modules Deployed</span>
+          <span class="value">5 of 6</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">Regulatory Status</span>
+          <span class="value">FIU-IND Pending</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">Entity Type</span>
+          <span class="value">MSME Proprietorship</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">UDYAM Registration</span>
+          <span class="value">TN-30-0110119</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">Target Market</span>
+          <span class="value">India Retail + Global</span>
+        </div>
+        <div class="biz-metric">
+          <span class="label">B2B Pipeline</span>
+          <span class="value">API Licensing (Post-FIU)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="roadmap fade-in">
+  <div class="section-tag">Roadmap</div>
+  <h2 class="section-title">Execution Timeline</h2>
+  <div class="roadmap-track">
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q3 2024</div>
+      <div class="roadmap-line"><div class="roadmap-dot done"></div><div class="roadmap-connector"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-done">COMPLETE</span>
+        <h4>Core Foundation + Behaviour Layer</h4>
+        <p>Modules 1 & 2. Risk scoring engine, drawdown detection, position ladder framework.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q4 2024</div>
+      <div class="roadmap-line"><div class="roadmap-dot done"></div><div class="roadmap-connector"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-done">COMPLETE</span>
+        <h4>Advanced Modules + Market Intelligence</h4>
+        <p>Modules 3 & 4. Advanced ladder, whale intelligence base, market correlation engine.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q1 2025</div>
+      <div class="roadmap-line"><div class="roadmap-dot done"></div><div class="roadmap-connector"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-done">COMPLETE</span>
+        <h4>User System + Public Launch</h4>
+        <p>Module 5. User interface, alert system. SHIELD-X goes live as Phase 0 Research Demo.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q1–Q2 2025</div>
+      <div class="roadmap-line"><div class="roadmap-dot active"></div><div class="roadmap-connector"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-live">IN PROGRESS</span>
+        <h4>FIU-IND Registration</h4>
+        <p>Regulatory compliance pathway. Required before Module 6, CPX token activation, and B2B API launch.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q3 2025</div>
+      <div class="roadmap-line"><div class="roadmap-dot"></div><div class="roadmap-connector"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-pending">PENDING</span>
+        <h4>Module 6 + Full Intelligence Suite</h4>
+        <p>Spike Classifier, News Shock Guard, Full Whale Tracker, FastAPI Backend — post FIU-IND approval.</p>
+      </div>
+    </div>
+    <div class="roadmap-item">
+      <div class="roadmap-date">Q4 2025+</div>
+      <div class="roadmap-line"><div class="roadmap-dot"></div></div>
+      <div class="roadmap-content">
+        <span class="roadmap-tag tag-pending">PLANNED</span>
+        <h4>B2B API + SaaS Revenue Launch</h4>
+        <p>API licensing to brokers and exchanges. SaaS institutional tier. CPX token ecosystem activation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOUNDER -->
+<div class="founder fade-in">
+  <div class="founder-inner">
+    <div class="section-tag">Founder</div>
+    <h2 class="section-title">Built by Someone Who Cares</h2>
+    <div class="founder-grid">
+      <div class="founder-card">
+        <div class="founder-avatar">R</div>
+        <h3>Rajkumar</h3>
+        <div class="title">Founder & Chief Architect</div>
+        <div class="location">📍 Vellore, Tamil Nadu, India</div>
+        <div class="founder-links">
+          <a href="https://linkedin.com/in/raj-kumar" target="_blank" class="founder-link">LinkedIn</a>
+          <a href="https://github.com/Rajkumarspm/shield-x" target="_blank" class="founder-link">GitHub</a>
+          <a href="https://twitter.com/rajkumar_spm" target="_blank" class="founder-link">@rajkumar_spm</a>
+        </div>
+      </div>
+      <div class="founder-bio">
+        <p>
+          <strong>CPX Protocol is a one-person operation built at night</strong>, around the schedules of three daughters and a singular belief: retail traders deserve the same quality of risk intelligence that institutions take for granted.
+        </p>
+        <p>
+          With a background in Psychology (B.Sc, 2018) and no formal engineering training, every line of SHIELD-X was built through persistence, AI-assisted development, and a refusal to compromise on the founding principle: <strong>never deceive anyone</strong>.
+        </p>
+        <p>
+          This is not a VC-funded startup optimizing for growth metrics. It is a bootstrapped MSME with a clear mission — and a compliance-first architecture that will scale properly, not quickly.
+        </p>
+        <div class="founder-values">
+          <div class="value-item">"Never deceive anyone."</div>
+          <div class="value-item">"Observe and inform — never restrict."</div>
+          <div class="value-item">"Free tool. Retail trader protection."</div>
+          <div class="value-item">"User decides. Always."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact fade-in">
+  <div class="section-tag" style="justify-content:center">Contact</div>
+  <h2 class="section-title">Get In Touch</h2>
+  <p style="color:var(--muted);font-size:15px;">For business inquiries, partnerships, or press.</p>
+  <div class="contact-form">
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" name="name" placeholder="Your name" required/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="your@email.com" required/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Inquiry Type</label>
+        <select name="type">
+          <option>Business Partnership</option>
+          <option>API Licensing</option>
+          <option>Research Collaboration</option>
+          <option>Press / Media</option>
+          <option>General</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" placeholder="Tell us about your inquiry..." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message →</button>
+    </form>
+    <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);display:flex;gap:24px;flex-wrap:wrap;">
+      <span>📧 shield-x@cpxprotocol.org</span>
+      <span>📧 foundation@cpxprotocol.org</span>
+      <span>📍 Vellore, Tamil Nadu, India</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="legal-note">
+      <strong style="color:var(--text)">Legal Disclaimer:</strong> SHIELD-X generates model outputs only. It is not a financial advisor, investment product, or trading service. All outputs are computational indicators for observational purposes. CPX Protocol does not custody funds, execute trades, or provide investment advice. Users are solely responsible for their decisions. CPX token is currently frozen and not publicly available pending regulatory compliance.
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>CPX Protocol</h3>
+        <p>The economic security layer. SHIELD-X is the operational risk intelligence engine.</p>
+        <p style="margin-top:12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">MSME: UDYAM-TN-30-0110119</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="research.html">Research</a>
+        <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank">Launch App</a>
+        <a href="https://github.com/Rajkumarspm/shield-x" target="_blank">GitHub</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="research.html#whitepaper">Whitepaper</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="https://linkedin.com/in/raj-kumar" target="_blank">LinkedIn</a>
+        <a href="https://twitter.com/rajkumar_spm" target="_blank">X / Twitter</a>
+        <a href="https://fiverr.com/s/jjmg4Rw" target="_blank">Fiverr</a>
+        <a href="mailto:shield-x@cpxprotocol.org">Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 CPX Protocol Research Unit. All rights reserved.</p>
+      <p>Built in Vellore, Tamil Nadu, India 🇮🇳</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll fade-in
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

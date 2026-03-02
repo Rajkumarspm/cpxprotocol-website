@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — CPX Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{--bg:#050810;--surface:#090e1a;--border:#1a2235;--accent:#00d4ff;--accent2:#0066ff;--accent3:#00ff88;--text:#e8edf5;--muted:#5a6a85;--danger:#ff4455;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.7;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(5,8,16,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--accent);text-decoration:none;}
+  .nav-logo span{color:var(--text);}
+  .nav-links{display:flex;gap:32px;}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--accent);}
+  .page{padding:120px 40px 80px;max-width:1000px;margin:0 auto;position:relative;z-index:1;}
+  .page-tag{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .page-tag::before{content:'';display:block;width:32px;height:1px;background:var(--accent);}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(36px,5vw,56px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:24px;}
+  .lead{font-size:17px;color:var(--muted);max-width:640px;margin-bottom:60px;line-height:1.8;}
+  .about-grid{display:grid;grid-template-columns:280px 1fr;gap:60px;margin-bottom:80px;}
+  .founder-card{background:var(--surface);border:1px solid var(--border);padding:36px;border-radius:6px;text-align:center;}
+  .avatar{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:36px;font-family:'Syne',sans-serif;font-weight:800;color:#000;}
+  .founder-card h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px;}
+  .fc-title{font-size:11px;color:var(--accent);font-family:'DM Mono',monospace;letter-spacing:0.1em;margin-bottom:8px;}
+  .fc-loc{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  .fc-links{display:flex;flex-direction:column;gap:8px;}
+  .fc-link{display:block;font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);text-decoration:none;padding:8px;border:1px solid var(--border);border-radius:4px;transition:all 0.2s;}
+  .fc-link:hover{border-color:var(--accent);color:var(--accent);}
+  .about-text p{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:20px;}
+  .about-text p strong{color:var(--text);}
+  .values-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;}
+  .v-item{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:16px;border-radius:4px;font-size:14px;font-style:italic;color:var(--muted);}
+  .v-item strong{color:var(--text);font-style:normal;}
+  h2{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;margin-bottom:24px;}
+  .vision-block{background:var(--surface);border:1px solid var(--border);padding:40px;border-radius:6px;margin-bottom:40px;}
+  .vision-block p{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:16px;}
+  .vision-block p:last-child{margin-bottom:0;}
+  .cpx-block{background:var(--surface);border:1px solid var(--border);padding:40px;border-radius:6px;margin-bottom:40px;}
+  .cpx-items{display:flex;flex-direction:column;gap:16px;margin-top:24px;}
+  .cpx-item{display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--border);}
+  .cpx-item:first-child{border-top:none;}
+  .cpx-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex-shrink:0;}
+  .cpx-item-text h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+  .cpx-item-text p{font-size:13px;color:var(--muted);}
+  .frozen-notice{background:rgba(255,68,85,0.05);border:1px solid rgba(255,68,85,0.2);padding:16px 20px;border-radius:4px;font-size:13px;color:var(--muted);margin-top:16px;}
+  footer{border-top:1px solid var(--border);padding:32px 40px;text-align:center;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">CPX<span> Protocol</span></a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="research.html">Research</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="color:var(--accent)">Launch App ↗</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="page-tag">About</div>
+  <h1>The Person Behind<br/><span style="color:var(--accent)">the Protocol</span></h1>
+  <p class="lead">CPX Protocol is not a team with a pitch deck. It is one person, one mission, and an uncompromising belief that retail traders deserve better tools than what the market gives them.</p>
+
+  <div class="about-grid">
+    <div>
+      <div class="founder-card">
+        <div class="avatar">R</div>
+        <h3>Rajkumar</h3>
+        <div class="fc-title">Founder & Chief Architect</div>
+        <div class="fc-loc">📍 Vellore, Tamil Nadu, India</div>
+        <div class="fc-links">
+          <a href="https://linkedin.com/in/raj-kumar" target="_blank" class="fc-link">↗ LinkedIn</a>
+          <a href="https://github.com/Rajkumarspm/shield-x" target="_blank" class="fc-link">↗ GitHub</a>
+          <a href="https://twitter.com/rajkumar_spm" target="_blank" class="fc-link">↗ @rajkumar_spm</a>
+          <a href="https://fiverr.com/s/jjmg4Rw" target="_blank" class="fc-link">↗ Fiverr</a>
+          <a href="mailto:rajkumar@cpxprotocol.org" class="fc-link">↗ rajkumar@cpxprotocol.org</a>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p><strong>B.Sc Psychology, 2018.</strong> No engineering degree. No institutional backing. No co-founder. Three daughters. Night shifts. SHIELD-X.</p>
+      <p>CPX Protocol began as a personal research question: why do retail traders consistently fail in ways that were, in principle, observable in advance? The answer — lack of real-time behavioral risk intelligence — became the product.</p>
+      <p>Every module of SHIELD-X was built through AI-assisted development, rigorous self-education, and a commitment to never shipping something that deceives the user. <strong>Non-advisory by design. Non-custodial by architecture. Free by choice.</strong></p>
+      <p>The Psychology background is not incidental. Understanding how traders behave under stress, how loss aversion creates compounding errors, and how information asymmetry distorts decision-making — this is the theoretical foundation of SHIELD-X's behavioral layer.</p>
+      <div class="values-grid">
+        <div class="v-item"><strong>"Never deceive anyone."</strong></div>
+        <div class="v-item"><strong>"Observe and inform — never restrict."</strong></div>
+        <div class="v-item"><strong>"Free tool. Retail trader protection."</strong></div>
+        <div class="v-item"><strong>"User decides. Always."</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vision-block">
+    <h2>Vision</h2>
+    <p><strong style="color:var(--text)">CPX Protocol exists to be the economic security layer for digital asset markets.</strong> Not a trading tool. Not an exchange. An intelligence layer — one that sits beneath every retail trader's decision and gives them the risk visibility that institutions have always had access to.</p>
+    <p>The long-term architecture envisions SHIELD-X as the client-facing interface of a broader risk intelligence infrastructure: API-licensed to brokers, integrated by fintech platforms, and eventually underpinned by the CPX token as a utility and governance layer — after full regulatory compliance is achieved.</p>
+    <p>The mission is not quick. Compliance-first development is slower than move-fast-and-break-things. But it is the only honest path for a tool that touches people's financial awareness.</p>
+  </div>
+
+  <div class="cpx-block">
+    <h2>CPX Token — Role in the Ecosystem</h2>
+    <p style="color:var(--muted);font-size:15px;">CPX is the utility token of CPX Protocol. It is currently frozen and not publicly available. Its role is architectural — not speculative.</p>
+    <div class="cpx-items">
+      <div class="cpx-item">
+        <div class="cpx-dot"></div>
+        <div class="cpx-item-text"><h4>Supply</h4><p>20,000,000 CPX — fixed. Polygon (POL) chain.</p></div>
+      </div>
+      <div class="cpx-item">
+        <div class="cpx-dot"></div>
+        <div class="cpx-item-text"><h4>Planned Utility</h4><p>API access tier, governance participation, and ecosystem incentive alignment — post-regulatory clearance only.</p></div>
+      </div>
+      <div class="cpx-item">
+        <div class="cpx-dot"></div>
+        <div class="cpx-item-text"><h4>Current Status</h4><p>Publicly frozen. FIU-IND registration in progress. No CPX will be activated until compliance requirements are fully met.</p></div>
+      </div>
+      <div class="cpx-item">
+        <div class="cpx-dot"></div>
+        <div class="cpx-item-text"><h4>Separation from SHIELD-X</h4><p>SHIELD-X operates completely independently of CPX. The tool is free and functional with zero token dependency.</p></div>
+      </div>
+    </div>
+    <div class="frozen-notice">⚠️ CPX token is not currently available for purchase, trading, or any public interaction. This will not change until FIU-IND registration is complete and all applicable regulatory requirements are satisfied.</div>
+  </div>
+</div>
+<footer>© 2025 CPX Protocol Research Unit · MSME: UDYAM-TN-30-0110119 · Vellore, Tamil Nadu, India</footer>
+</body>
+</html>

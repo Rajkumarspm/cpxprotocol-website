@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Research — CPX Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root { --bg:#050810; --surface:#090e1a; --border:#1a2235; --accent:#00d4ff; --accent2:#0066ff; --accent3:#00ff88; --text:#e8edf5; --muted:#5a6a85; --danger:#ff4455; }
+  *{margin:0;padding:0;box-sizing:border-box;} html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;line-height:1.7;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;background:rgba(5,8,16,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--accent);text-decoration:none;}
+  .nav-logo span{color:var(--text);}
+  .nav-links{display:flex;gap:32px;}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--accent);}
+  .page{padding:120px 40px 80px;max-width:1100px;margin:0 auto;position:relative;z-index:1;}
+  .page-tag{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.2em;text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .page-tag::before{content:'';display:block;width:32px;height:1px;background:var(--accent);}
+  h1{font-family:'Syne',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:24px;}
+  .lead{font-size:18px;color:var(--muted);max-width:640px;margin-bottom:60px;}
+  .research-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:60px;}
+  .r-card{background:var(--surface);border:1px solid var(--border);padding:32px;border-radius:6px;}
+  .r-card h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:12px;}
+  .r-card p{font-size:14px;color:var(--muted);line-height:1.7;}
+  .r-card .tag{display:inline-block;font-size:10px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:100px;background:rgba(0,212,255,0.1);color:var(--accent);margin-bottom:12px;}
+  .modules{margin-bottom:60px;}
+  .modules h2{font-family:'Syne',sans-serif;font-size:32px;font-weight:700;margin-bottom:32px;}
+  .module-row{display:grid;grid-template-columns:80px 1fr auto;gap:24px;align-items:start;padding:24px 0;border-top:1px solid var(--border);}
+  .module-row:last-child{border-bottom:1px solid var(--border);}
+  .mod-num{font-family:'DM Mono',monospace;font-size:28px;font-weight:300;color:var(--border);}
+  .mod-content h4{font-size:16px;font-weight:700;margin-bottom:6px;}
+  .mod-content p{font-size:13px;color:var(--muted);}
+  .mod-status{font-family:'DM Mono',monospace;font-size:11px;padding:4px 12px;border-radius:100px;white-space:nowrap;margin-top:4px;}
+  .st-live{background:rgba(0,255,136,0.1);color:var(--accent3);}
+  .st-frozen{background:rgba(255,68,85,0.1);color:var(--danger);}
+  .wp-section{background:var(--surface);border:1px solid var(--accent);border-radius:6px;padding:40px;text-align:center;margin-bottom:60px;}
+  .wp-section h2{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:12px;}
+  .wp-section p{color:var(--muted);margin-bottom:24px;}
+  .btn-primary{background:var(--accent);color:#000;padding:14px 32px;border-radius:4px;font-weight:700;font-size:14px;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;display:inline-block;transition:all 0.2s;}
+  .btn-primary:hover{background:#00b8d9;}
+  footer{border-top:1px solid var(--border);padding:32px 40px;text-align:center;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">CPX<span> Protocol</span></a>
+  <div class="nav-links">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="color:var(--accent)">Launch App ↗</a>
+  </div>
+</nav>
+<div class="page">
+  <div class="page-tag">Research Framework</div>
+  <h1>The Architecture of<br/><span style="color:var(--accent)">Behavioral Risk</span></h1>
+  <p class="lead">SHIELD-X is built on a multi-layer research framework that models capital erosion, behavioral patterns, and market stress scenarios — without collecting user data or providing financial advice.</p>
+
+  <div class="research-grid">
+    <div class="r-card">
+      <div class="tag">METHODOLOGY</div>
+      <h3>Adversarial Simulation Logic</h3>
+      <p>SHIELD-X stress-tests positions against worst-case cascade scenarios. By modeling adversarial market conditions — not just historical averages — the engine generates risk scores that reflect true downside exposure, not optimistic projections.</p>
+    </div>
+    <div class="r-card">
+      <div class="tag">SCORING</div>
+      <h3>Multi-Factor Risk Score</h3>
+      <p>The SHIELD-X Risk Score aggregates drawdown trajectory, position size relative to liquidity, whale movement pressure, and volatility index into a single 0–100 observable score. No black box — the methodology is documented.</p>
+    </div>
+    <div class="r-card">
+      <div class="tag">ARCHITECTURE</div>
+      <h3>CARV Logic</h3>
+      <p>Capital-Aware Reserve Vault logic models reserve-threshold scenarios under simulated conditions. It provides the theoretical backbone for understanding when capital erosion becomes structurally dangerous — before it happens.</p>
+    </div>
+    <div class="r-card">
+      <div class="tag">PRINCIPLES</div>
+      <h3>Non-Advisory by Design</h3>
+      <p>Every output is explicitly framed as a model output. SHIELD-X observes and informs — it never restricts, never recommends, and never claims predictive accuracy. The user retains 100% decision authority at all times.</p>
+    </div>
+  </div>
+
+  <div class="modules">
+    <h2>Module Architecture</h2>
+    <div class="module-row">
+      <div class="mod-num">01</div>
+      <div class="mod-content"><h4>Core Foundation</h4><p>Base risk engine, data ingestion layer, drawdown detection framework, and core scoring architecture.</p></div>
+      <div class="mod-status st-live">LIVE ✓</div>
+    </div>
+    <div class="module-row">
+      <div class="mod-num">02</div>
+      <div class="mod-content"><h4>Behaviour Layer</h4><p>Position behavior analysis, pattern classification, and behavioral risk indicator generation.</p></div>
+      <div class="mod-status st-live">LIVE ✓</div>
+    </div>
+    <div class="module-row">
+      <div class="mod-num">03</div>
+      <div class="mod-content"><h4>Advanced Ladder</h4><p>Structured position scaling models, entry risk frameworks, and simulation-based ladder analysis.</p></div>
+      <div class="mod-status st-live">LIVE ✓</div>
+    </div>
+    <div class="module-row">
+      <div class="mod-num">04</div>
+      <div class="mod-content"><h4>Market Intelligence</h4><p>Liquidity monitoring, whale movement tracking (base layer), and market correlation engine.</p></div>
+      <div class="mod-status st-live">LIVE ✓</div>
+    </div>
+    <div class="module-row">
+      <div class="mod-num">05</div>
+      <div class="mod-content"><h4>User System</h4><p>Alert feed, dashboard interface, notification framework, and user-facing risk communication layer.</p></div>
+      <div class="mod-status st-live">LIVE ✓</div>
+    </div>
+    <div class="module-row">
+      <div class="mod-num">06</div>
+      <div class="mod-content"><h4>POST FIU-IND Suite</h4><p>Spike Classifier, News Shock Guard, Full Whale Tracker, FastAPI Backend, Sandbox P&amp;L Simulation. Frozen pending regulatory clearance.</p></div>
+      <div class="mod-status st-frozen">FROZEN — POST FIU-IND</div>
+    </div>
+  </div>
+
+  <div id="whitepaper" class="wp-section">
+    <h2>CPX Protocol Whitepaper</h2>
+    <p>The complete technical specification of CPX Protocol's capital-aware architecture, CARV logic, and SHIELD-X research methodology.</p>
+    <a href="https://www.cpxprotocol.org/whitepaper" target="_blank" class="btn-primary">Read Whitepaper →</a>
+  </div>
+</div>
+<footer>© 2025 CPX Protocol Research Unit · MSME: UDYAM-TN-30-0110119 · Vellore, Tamil Nadu, India</footer>
+</body>
+</html>
