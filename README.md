@@ -47,7 +47,7 @@ CPX Protocol is a bootstrapped MSME research initiative focused on building beha
 Psychology B.Sc 2018. Bootstrapped. AI-assisted development.  
 Philosophy: *"Never deceive anyone."*
 
-- LinkedIn: https://linkedin.com/in/raj-kumar
+- LinkedIn: https://linkedin.com/in/rajkumarspm
 - Twitter: https://twitter.com/rajkumar_spm
 
 ---
