@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="style.css">
 # CPX Protocol — Official Website
 
 > **"CPX Protocol is the economic security layer. SHIELD-X is the operational risk intelligence engine."**
