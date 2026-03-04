@@ -20,51 +20,17 @@
   </div>
 </nav>
 
-<!-- Replace radar bar with this -->
-<div style="background:#fff3cd;border-bottom:2px solid #dc2626;padding:8px 48px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
-  <div style="display:flex;align-items:center;gap:10px;flex:1;">
+<!-- LIVE RADAR BAR -->
+<div style="background:#fff3cd;border-bottom:2px solid #dc2626;padding:8px 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+  <div style="display:flex;align-items:center;gap:10px;flex:1;overflow:hidden;">
     <span style="font-size:13px;flex-shrink:0;">🛰️</span>
-    <span style="font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;flex-shrink:0;">SHIELD-X RADAR:</span>
-    <div style="overflow:hidden;flex:1;">
-      <marquee style="font-size:11px;font-weight:500;color:#92400e;">
-        ✅ RADAR ACTIVE — Monitoring CMC Top 500 × Binance Futures for 75%+ movement — 
-        For live alerts open SHIELD-X App — 
-        ✅ RADAR ACTIVE — Monitoring CMC Top 500 × Binance Futures — 
-        No static alerts shown here — Live data inside SHIELD-X —
-      </marquee>
-    </div>
+    <span style="font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;flex-shrink:0;">SHIELD-X RADAR ACTIVE:</span>
+    <marquee style="font-size:11px;font-weight:500;color:#92400e;">
+      Monitoring CMC Top 500 × Binance Futures for 75%+ movement — No static alerts here — Live real-time data inside SHIELD-X App — Open SHIELD-X for live 75% spike detection and full analysis — Monitoring CMC Top 500 × Binance Futures —
+    </marquee>
   </div>
-  <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" 
-     target="_blank" 
-     style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">
-    Live Radar ↗
-  </a>
+  <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">Live Radar ↗</a>
 </div>
-
-<script>
-async function checkRadar() {
-  try {
-    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&price_change_percentage=24h');
-    const coins = await res.json();
-    const binancePairs = ['bitcoin','ethereum','binancecoin','solana','ripple','cardano','polkadot','matic-network','avalanche-2','chainlink','litecoin','uniswap','cosmos','near','aptos','arbitrum','optimism','injective-protocol','sui','celestia'];
-    const alerts = coins.filter(c => binancePairs.includes(c.id) && c.price_change_percentage_24h && Math.abs(c.price_change_percentage_24h) >= 75);
-    const bar = document.getElementById('radar-bar');
-    const ok = document.getElementById('radar-ok');
-    const text = document.getElementById('radar-text');
-    if (alerts.length > 0) {
-      const msg = alerts.map(a => `${a.symbol.toUpperCase()} ${a.price_change_percentage_24h > 0 ? '+' : ''}${a.price_change_percentage_24h.toFixed(1)}% | `).join('');
-      text.textContent = msg;
-      bar.style.display = 'flex';
-      ok.style.display = 'none';
-    } else {
-      bar.style.display = 'none';
-      ok.style.display = 'block';
-    }
-  } catch(e) { console.log('Radar check failed'); }
-}
-checkRadar();
-setInterval(checkRadar, 300000);
-</script>
 
 <!-- HERO -->
 <div style="background:#fff;border-bottom:1px solid var(--border);">
