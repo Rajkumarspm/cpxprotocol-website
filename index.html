@@ -20,6 +20,44 @@
   </div>
 </nav>
 
+<!-- LIVE RADAR BAR -->
+<div id="radar-bar" style="display:none;background:#fff3cd;border-bottom:2px solid #dc2626;padding:10px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span style="font-size:14px;">🚨</span>
+    <span style="font-size:12px;font-weight:700;color:#dc2626;letter-spacing:0.05em;">LIVE RADAR ALERT:</span>
+    <marquee id="radar-text" style="font-size:12px;font-weight:600;color:#92400e;width:500px;"></marquee>
+  </div>
+  <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;">Full Analysis in SHIELD-X →</a>
+</div>
+<div id="radar-ok" style="background:#ecfdf5;border-bottom:1px solid #a7f3d0;padding:7px 48px;text-align:center;font-size:11px;color:#059669;font-weight:500;">
+  <span style="margin-right:8px;">✅</span> SHIELD-X RADAR ACTIVE — No CMC Top 500 coins above 75% movement on Binance Futures — Market within normal observation range
+</div>
+
+<script>
+async function checkRadar() {
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&price_change_percentage=24h');
+    const coins = await res.json();
+    const binancePairs = ['bitcoin','ethereum','binancecoin','solana','ripple','cardano','polkadot','matic-network','avalanche-2','chainlink','litecoin','uniswap','cosmos','near','aptos','arbitrum','optimism','injective-protocol','sui','celestia'];
+    const alerts = coins.filter(c => binancePairs.includes(c.id) && c.price_change_percentage_24h && Math.abs(c.price_change_percentage_24h) >= 75);
+    const bar = document.getElementById('radar-bar');
+    const ok = document.getElementById('radar-ok');
+    const text = document.getElementById('radar-text');
+    if (alerts.length > 0) {
+      const msg = alerts.map(a => `${a.symbol.toUpperCase()} ${a.price_change_percentage_24h > 0 ? '+' : ''}${a.price_change_percentage_24h.toFixed(1)}% | `).join('');
+      text.textContent = msg;
+      bar.style.display = 'flex';
+      ok.style.display = 'none';
+    } else {
+      bar.style.display = 'none';
+      ok.style.display = 'block';
+    }
+  } catch(e) { console.log('Radar check failed'); }
+}
+checkRadar();
+setInterval(checkRadar, 300000);
+</script>
+
 <!-- HERO -->
 <div style="background:#fff;border-bottom:1px solid var(--border);">
   <div class="section" style="padding-top:100px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
@@ -130,12 +168,143 @@
     <div class="section-tag">Roadmap</div>
     <h2 class="section-title">Execution Timeline</h2>
     <div style="margin-top:32px;">
-      <div class="rm-item"><div class="rm-date">Q3 2024</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>Core Foundation + Behaviour Layer</h4><p>Modules 1 & 2. Risk scoring engine, drawdown detection, position ladder framework.</p></div></div>
-      <div class="rm-item"><div class="rm-date">Q4 2024</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>Advanced Modules + Market Intelligence</h4><p>Modules 3 & 4. Advanced ladder, whale intelligence base, market correlation engine.</p></div></div>
-      <div class="rm-item"><div class="rm-date">Q1 2025</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>User System + Public Launch</h4><p>Module 5. SHIELD-X goes live as Phase 0 Research Demo.</p></div></div>
-      <div class="rm-item"><div class="rm-date">Q1–Q2 2025</div><div class="rm-line"><div class="rm-dot active"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-live">IN PROGRESS</span><h4>FIU-IND Registration</h4><p>Regulatory compliance pathway before Module 6, CPX token, and B2B API launch.</p></div></div>
-      <div class="rm-item"><div class="rm-date">Q3 2025</div><div class="rm-line"><div class="rm-dot"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-pending">PENDING</span><h4>Module 6 + Full Intelligence Suite</h4><p>Spike Classifier, News Shock Guard, Full Whale Tracker, FastAPI Backend.</p></div></div>
-      <div class="rm-item"><div class="rm-date">Q4 2025+</div><div class="rm-line"><div class="rm-dot"></div></div><div class="rm-content"><span class="rm-tag tag-pending">PLANNED</span><h4>B2B API + SaaS Revenue Launch</h4><p>API licensing to brokers and exchanges. CPX token ecosystem activation.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Q1 2026</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>Core Foundation + Behaviour Layer</h4><p>Modules 1 & 2. Risk scoring engine, drawdown detection, position ladder framework.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Q1 2026</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>Advanced Modules + Market Intelligence</h4><p>Modules 3 & 4. Advanced ladder, whale intelligence base, market correlation engine.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Feb 2026</div><div class="rm-line"><div class="rm-dot done"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-done">COMPLETE</span><h4>User System + Public Launch</h4><p>Module 5. SHIELD-X goes live as Phase 0 Research Demo.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Q2 2026</div><div class="rm-line"><div class="rm-dot active"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-live">IN PROGRESS</span><h4>FIU-IND Registration + Legal Entity</h4><p>Regulatory compliance pathway before Module 6, CPX token, and B2B API launch.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Q3 2026</div><div class="rm-line"><div class="rm-dot"></div><div class="rm-connector"></div></div><div class="rm-content"><span class="rm-tag tag-pending">PENDING</span><h4>Module 6 + Full Intelligence Suite</h4><p>Spike Classifier, News Shock Guard, Full Whale Tracker, FastAPI Backend.</p></div></div>
+      <div class="rm-item"><div class="rm-date">Q4 2026+</div><div class="rm-line"><div class="rm-dot"></div></div><div class="rm-content"><span class="rm-tag tag-pending">PLANNED</span><h4>B2B API + SaaS Revenue + Auto-Bot Engine</h4><p>API licensing to brokers and exchanges. CPX token ecosystem. Automated ladder execution engine.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LADDER ENTRY FRAMEWORK -->
+<div class="section-wrap-white">
+  <div class="section">
+    <div class="section-tag">Entry Framework</div>
+    <h2 class="section-title">Commander Ladder System</h2>
+    <p class="section-body">Structured position scaling model — E1 to E12. Each level triggered only at predefined spike thresholds. Capital preserved through mathematical position sizing, not emotion.</p>
+    <div style="margin-top:8px;display:inline-flex;align-items:center;gap:8px;background:var(--warn-light);border:1px solid #fde68a;padding:6px 14px;border-radius:100px;font-size:11px;color:var(--warn);font-weight:500;">
+      ⚡ Funding Rate Rule: If |funding rate| &gt; 0.2% — DO NOT ENTER. Exchange extraction active.
+    </div>
+
+    <div style="margin-top:28px;overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:var(--navy);color:#fff;">
+            <th style="padding:10px 16px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Level</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Spike Threshold</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Allocation</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Min Order (USDT)</th>
+            <th style="padding:10px 16px;text-align:left;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);background:var(--white);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E1</td>
+            <td style="padding:10px 16px;">100%</td>
+            <td style="padding:10px 16px;">2.5% — ₹4</td>
+            <td style="padding:10px 16px;">5 USDT</td>
+            <td style="padding:10px 16px;color:var(--muted);">First entry</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--bg);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E2</td>
+            <td style="padding:10px 16px;">150%</td>
+            <td style="padding:10px 16px;">2.5% — ₹4</td>
+            <td style="padding:10px 16px;">5 USDT</td>
+            <td style="padding:10px 16px;color:var(--muted);">Hold level</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--white);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E3</td>
+            <td style="padding:10px 16px;">225%</td>
+            <td style="padding:10px 16px;">5% — ₹8</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--warn);font-weight:500;">Double margin starts</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--bg);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E4</td>
+            <td style="padding:10px 16px;">375%</td>
+            <td style="padding:10px 16px;">10% — ₹16</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--warn);font-weight:500;">Double margin</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--white);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E5</td>
+            <td style="padding:10px 16px;">650%</td>
+            <td style="padding:10px 16px;">20% — ₹32</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--warn);font-weight:500;">Double margin</td>
+          </tr>
+          <tr style="border-bottom:2px solid var(--navy);background:var(--bg);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--blue);">E6</td>
+            <td style="padding:10px 16px;">1,250%</td>
+            <td style="padding:10px 16px;">40% — ₹64</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);font-weight:600;">Max normal entry</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:#fff8f8;">
+            <td style="padding:10px 16px;font-weight:700;color:var(--red);">E7</td>
+            <td style="padding:10px 16px;">2,250%</td>
+            <td style="padding:10px 16px;">Extreme</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);">⚠️ Short option opens</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--white);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--red);">E8</td>
+            <td style="padding:10px 16px;">4,250%</td>
+            <td style="padding:10px 16px;">Extreme</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);">⚠️ User willing only</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:#fff8f8;">
+            <td style="padding:10px 16px;font-weight:700;color:var(--red);">E9</td>
+            <td style="padding:10px 16px;">7,500%</td>
+            <td style="padding:10px 16px;">Extreme</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);">⚠️ User willing only</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--white);">
+            <td style="padding:10px 16px;font-weight:700;color:var(--red);">E10</td>
+            <td style="padding:10px 16px;">14,300%</td>
+            <td style="padding:10px 16px;">Extreme</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);">⚠️ User willing only</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:#fff8f8;">
+            <td style="padding:10px 16px;font-weight:700;color:var(--red);">E11</td>
+            <td style="padding:10px 16px;">28,600%</td>
+            <td style="padding:10px 16px;">Extreme</td>
+            <td style="padding:10px 16px;">10 USDT</td>
+            <td style="padding:10px 16px;color:var(--red);">⚠️ User willing only</td>
+          </tr>
+          <tr style="background:#1a0000;">
+            <td style="padding:12px 16px;font-weight:900;color:#ff4444;font-size:13px;">E12</td>
+            <td style="padding:12px 16px;color:#ff9999;font-weight:700;">286,000%</td>
+            <td style="padding:12px 16px;color:#ff9999;">BLACK SWAN</td>
+            <td style="padding:12px 16px;color:#ff9999;">All remaining</td>
+            <td style="padding:12px 16px;color:#ff6666;font-weight:600;">🦢 Market collapse scenario</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div style="background:var(--blue-light);border:1px solid #bfdbfe;padding:14px 16px;border-radius:4px;font-size:11px;color:var(--navy);">
+        <strong>Max hold:</strong> 48 hours<br/>
+        <span style="color:var(--muted);">Funding fee compounds beyond this</span>
+      </div>
+      <div style="background:var(--warn-light);border:1px solid #fde68a;padding:14px 16px;border-radius:4px;font-size:11px;color:#92400e;">
+        <strong>E7-E12 requires:</strong> User explicit consent<br/>
+        <span style="color:var(--muted);">Extreme zone — not default</span>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:14px 16px;border-radius:4px;font-size:11px;color:#166534;">
+        <strong>🤖 Auto-Bot Engine:</strong> Coming Post FIU-IND<br/>
+        <span style="color:var(--muted);">Automated ladder execution planned</span>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;text-align:center;">
+      <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" class="btn-primary">Use Ladder in SHIELD-X ↗</a>
     </div>
   </div>
 </div>
@@ -190,7 +359,7 @@
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;">Send Message →</button>
       </form>
       <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;color:rgba(255,255,255,0.4);display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
-        <span>📧 shield-x@cpxprotocol.org</span><span>📧 foundation@cpxprotocol.org</span><span>📍 Vellore, Tamil Nadu, India</span>
+        <span>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e5d46474b424a03566e4d5e565e5c415a414d414200415c49">[email&#160;protected]</a></span><span>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfb9b0aab1bbbeabb6b0b19fbcafa7afadb0abb0bcb0b3f1b0adb8">[email&#160;protected]</a></span><span>📍 Vellore, Tamil Nadu, India</span>
       </div>
     </div>
   </div>
@@ -204,14 +373,4 @@
       <div class="footer-brand"><h3>CPX Protocol</h3><p>The economic security layer. SHIELD-X is the operational risk intelligence engine.</p><p style="margin-top:8px;font-size:11px;color:var(--muted);">MSME: UDYAM-TN-30-0110119</p></div>
       <div class="footer-col"><h4>Product</h4><a href="dashboard.html">Dashboard</a><a href="research.html">Research</a><a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank">Launch App</a><a href="https://github.com/Rajkumarspm/shield-x" target="_blank">GitHub</a></div>
       <div class="footer-col"><h4>Company</h4><a href="about.html">About</a><a href="contact.html">Contact</a><a href="research.html#whitepaper">Whitepaper</a></div>
-      <div class="footer-col"><h4>Connect</h4><a href="https://linkedin.com/in/rajkumarspm" target="_blank">LinkedIn</a><a href="https://twitter.com/rajkumar_spm" target="_blank">X / Twitter</a><a href="mailto:shield-x@cpxprotocol.org">Email</a></div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 CPX Protocol Research Unit. All rights reserved.</p>
-      <p>Built in Vellore, Tamil Nadu, India 🇮🇳</p>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+      <div class="footer-col"><h4>Connect</h4><a href="https://linkedin.com/in/rajkumarspm" target="_blank">LinkedIn</a><a href="https://twitter.com/rajkumar_spm" target="_blank">X / Twitter</a><a href="/cdn-cgi/l/
