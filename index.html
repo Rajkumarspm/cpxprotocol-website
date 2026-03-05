@@ -21,16 +21,25 @@
 </nav>
 
 <!-- LIVE RADAR BAR -->
-<div style="margin-top:60px;background:#fff3cd;border-bottom:2px solid #dc2626;padding:8px 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-  <div style="display:flex;align-items:center;gap:10px;flex:1;overflow:hidden;">
-    <span style="font-size:13px;flex-shrink:0;">🛰️</span>
-    <span style="font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;flex-shrink:0;">SHIELD-X RADAR ACTIVE:</span>
-    <marquee style="font-size:11px;font-weight:500;color:#92400e;">
-      Monitoring CMC Top 500 × Binance Futures for 75%+ movement — No static alerts here — Live real-time data inside SHIELD-X App — Open SHIELD-X for live 75% spike detection and full analysis — Monitoring CMC Top 500 × Binance Futures —
-    </marquee>
+<div style="margin-top:60px;background:#fff3cd;border-bottom:2px solid #dc2626;">
+  <div style="padding:6px 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <span style="font-size:13px;">🛰️</span>
+      <span style="font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;">SHIELD-X LIVE RADAR:</span>
+    </div>
+    <div style="flex:1;overflow:hidden;">
+      <gecko-coin-price-marquee-widget
+        locale="en"
+        outlined="false"
+        coin-ids="bitcoin,ethereum,solana,ripple,binancecoin,cardano,avalanche-2,chainlink,near,injective-protocol"
+        initial-currency="usd"
+        style="width:100%;">
+      </gecko-coin-price-marquee-widget>
+    </div>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">Full Analysis ↗</a>
   </div>
-  <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">Live Radar ↗</a>
 </div>
+<script src="https://widgets.coingecko.com/gecko-coin-price-marquee-widget.js"></script>
 
 <!-- HERO -->
 <div style="background:#fff;border-bottom:1px solid var(--border);">
