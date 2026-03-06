@@ -54,10 +54,13 @@ nav {
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 .nav-logo {
-  font-size: 18px; font-weight: 700;
-  color: var(--navy); text-decoration: none; letter-spacing: -0.3px;
+  font-size: 20px; font-weight: 900;
+  text-decoration: none; letter-spacing: -0.5px;
+  font-family: 'Roboto', sans-serif;
 }
-.nav-logo span:not(.logo-cp):not(.logo-x) { color: var(--blue); }
+.nav-logo .logo-cp { color: #1877F2; }
+.nav-logo .logo-x  { color: #34A853; }
+.nav-logo .logo-protocol { color: #1877F2; font-weight: 400; font-size: 14px; letter-spacing: 0; margin-left: 4px; }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a {
   color: var(--muted); text-decoration: none;
@@ -280,20 +283,4 @@ footer {
   .section { padding: 48px 20px; }
   .form-row { grid-template-columns: 1fr; }
   footer { padding: 32px 20px 20px; }
-}
-
-/* === CPX LOGO === */
-.logo-cp {
-  color: #2F5BA6;
-  font-weight: 900;
-  font-size: 20px;
-  font-family: 'Roboto', sans-serif;
-  letter-spacing: -0.5px;
-}
-.logo-x {
-  color: #4DBE48;
-  font-weight: 900;
-  font-size: 20px;
-  font-family: 'Roboto', sans-serif;
-  letter-spacing: -0.5px;
 }
