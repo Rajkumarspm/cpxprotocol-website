@@ -19,7 +19,7 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nav-logo">CPX <span>Protocol</span> / <span style="color:var(--muted)">SHIELD-X</span></a>
+  <a href="index.html" class="nav-logo"><span class="logo-cp">CP</span><span class="logo-x">X</span> <span style="color:var(--muted);font-weight:400;font-size:13px;">/ SHIELD-X</span></a>
   <div class="nav-links">
     <div class="live-badge" style="margin-bottom:0;"><span class="dot"></span>BETA RESEARCH DEMO</div>
     <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="color:var(--blue);">Live App ↗</a>
@@ -92,65 +92,6 @@
   <div style="margin:0 16px 16px;padding:12px 16px;background:var(--warn-light);border:1px solid #fde68a;border-radius:4px;font-size:11px;color:#92400e;">
     ⚠️ <strong>Model Output Only:</strong> All data shown is structured mock data for research demonstration. SHIELD-X is not a financial advisor or trading service. For live intelligence, visit the <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" style="color:var(--blue);">SHIELD-X app</a>.
   </div>
-
-  <!-- 75% SPIKE ANALYSIS SECTION -->
-  <div style="margin:0 16px 16px;border:1px solid var(--border);background:var(--white);">
-    <div class="panel-header" style="background:var(--navy);">
-      <span class="panel-title" style="color:#fff;">🚨 75% Spike Analysis Engine</span>
-      <span style="font-size:10px;color:rgba(255,255,255,0.5);">CMC Top 500 × Binance Futures × Multi-Source Analysis</span>
-    </div>
-    <div style="padding:16px;">
-      <div id="spike-loading" style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">🔍 Scanning CMC Top 500 for 75%+ movement...</div>
-      <div id="spike-none" style="display:none;text-align:center;padding:20px;background:var(--green-light);border:1px solid #a7f3d0;border-radius:4px;">
-        <div style="font-size:20px;margin-bottom:8px;">✅</div>
-        <div style="font-size:13px;font-weight:600;color:var(--green);">No coins above 75% detected</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Market within normal observation range</div>
-      </div>
-      <div id="spike-results" style="display:none;"></div>
-    </div>
-
-    <!-- ANALYSIS CHECKLIST -->
-    <div style="padding:0 16px 16px;">
-      <div style="font-size:11px;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;">When 75%+ Detected — Analysis Protocol</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">📰 News Check</div>
-          <div style="color:var(--muted);">Company announcements, partnerships, exchange listings, regulatory news</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">👨‍💻 Dev Activity</div>
-          <div style="color:var(--muted);">GitHub commits, protocol upgrades, mainnet launches, smart contract activity</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">🐋 Whale Entry Check</div>
-          <div style="color:var(--muted);">Top 50 whale wallets — exchange transfers, avg price, buy/sell pressure</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">💱 Exchange Transfer</div>
-          <div style="color:var(--muted);">Which exchange? Transfer volume, OTC activity detection, wallet age</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">📊 Historical Pumps</div>
-          <div style="color:var(--muted);">Previous pump history, avg pump size, recovery time, pattern analysis</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">🕯️ Fake Wick Check</div>
-          <div style="color:var(--muted);">OTC trading detection, artificial wick vs genuine breakout analysis</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;">
-          <div style="font-weight:600;color:var(--navy);margin-bottom:4px;">📱 Social Media Scan</div>
-          <div style="color:var(--muted);">Twitter/X sentiment, Telegram activity, Reddit mentions, influencer activity</div>
-        </div>
-        <div style="border:1px solid var(--border);padding:10px 12px;border-radius:4px;font-size:11px;background:var(--blue-light);border-color:#bfdbfe;">
-          <div style="font-weight:600;color:var(--blue);margin-bottom:4px;">⚡ Funding Rate Check</div>
-          <div style="color:var(--muted);">If |funding rate| &gt; 0.2% — DO NOT ENTER. Exchange extraction active.</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;background:var(--red-light);border:1px solid #fecaca;padding:10px 14px;border-radius:4px;font-size:11px;color:var(--red);">
-        ⚠️ Full real-time analysis (whale wallets, on-chain data, social feeds) requires Module 6 — POST FIU-IND. Current analysis uses CoinGecko public data only.
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -158,46 +99,6 @@ setInterval(()=>{document.getElementById('clock').textContent=new Date().toUTCSt
 Chart.defaults.color='#64748b'; Chart.defaults.borderColor='#e2e8f0';
 new Chart(document.getElementById('liqChart'),{type:'line',data:{labels:['Mar 24','Mar 25','Mar 26','Mar 27','Mar 28','Mar 29','Mar 30'],datasets:[{label:'Liquidity ($B)',data:[2.61,2.58,2.72,2.69,2.55,2.48,2.41],borderColor:'#1a56db',backgroundColor:'rgba(26,86,219,0.06)',borderWidth:1.5,pointRadius:3,fill:true,tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:'#e2e8f0'}},y:{grid:{color:'#e2e8f0'}}}}});
 new Chart(document.getElementById('riskChart'),{type:'line',data:{labels:Array.from({length:30},(_,i)=>'D'+(i+1)),datasets:[{label:'Risk Score',data:[42,45,43,48,51,49,53,55,52,58,61,59,62,60,64,63,67,65,68,66,65,69,67,70,68,65,63,66,67,67.4],borderColor:'#d97706',backgroundColor:'rgba(217,119,6,0.05)',borderWidth:1.5,pointRadius:0,fill:true,tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{x:{grid:{color:'#e2e8f0'},ticks:{maxTicksLimit:6}},y:{grid:{color:'#e2e8f0'},min:30,max:100}}}});
-
-// 75% SPIKE SCANNER
-async function scanSpikes() {
-  try {
-    const binancePairs = ['bitcoin','ethereum','binancecoin','solana','ripple','cardano','polkadot','matic-network','avalanche-2','chainlink','litecoin','uniswap','cosmos','near','aptos','arbitrum','optimism','injective-protocol','sui','celestia'];
-    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&price_change_percentage=24h');
-    const coins = await res.json();
-    const alerts = coins.filter(c => binancePairs.includes(c.id) && c.price_change_percentage_24h && Math.abs(c.price_change_percentage_24h) >= 75);
-    document.getElementById('spike-loading').style.display = 'none';
-    if (alerts.length === 0) {
-      document.getElementById('spike-none').style.display = 'block';
-    } else {
-      const resultsDiv = document.getElementById('spike-results');
-      resultsDiv.style.display = 'block';
-      resultsDiv.innerHTML = alerts.map(a => {
-        const chg = a.price_change_percentage_24h;
-        const isUp = chg > 0;
-        return `<div style="border:1px solid ${isUp ? '#fecaca' : '#a7f3d0'};border-left:4px solid ${isUp ? '#dc2626' : '#059669'};padding:14px 16px;border-radius:4px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:${isUp ? '#fff8f8' : '#f0fdf4'};">
-          <div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-              <img src="${a.image}" style="width:24px;height:24px;border-radius:50%;" onerror="this.style.display='none'"/>
-              <strong style="font-size:14px;color:#0a1628;">${a.name}</strong>
-              <span style="font-size:11px;color:#64748b;text-transform:uppercase;">${a.symbol}</span>
-              <span style="font-size:10px;padding:2px 8px;border-radius:100px;background:#e8f0fe;color:#1a56db;">Rank #${a.market_cap_rank}</span>
-            </div>
-            <div style="font-size:11px;color:#64748b;">Price: <strong style="color:#0a1628;">$${a.current_price.toLocaleString()}</strong> &nbsp;|&nbsp; Market Cap: <strong>$${(a.market_cap/1e9).toFixed(2)}B</strong></div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:22px;font-weight:700;color:${isUp ? '#dc2626' : '#059669'};">${isUp ? '+' : ''}${chg.toFixed(1)}%</div>
-            <div style="font-size:10px;color:#64748b;margin-top:2px;">24h change</div>
-            <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="display:inline-block;margin-top:6px;font-size:10px;background:#1a56db;color:#fff;padding:3px 10px;border-radius:4px;text-decoration:none;">Analyse →</a>
-          </div>
-        </div>`;
-      }).join('');
-    }
-  } catch(e) {
-    document.getElementById('spike-loading').textContent = 'Radar scan unavailable. Check SHIELD-X app for live data.';
-  }
-}
-scanSpikes();
 </script>
 </body>
 </html>
