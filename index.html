@@ -20,26 +20,75 @@
   </div>
 </nav>
 
-<!-- LIVE RADAR BAR -->
-<div style="margin-top:60px;background:#fff3cd;border-bottom:2px solid #dc2626;">
-  <div style="padding:6px 48px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-      <span style="font-size:13px;">🛰️</span>
-      <span style="font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;">SHIELD-X LIVE RADAR:</span>
-    </div>
+<!-- LIVE RADAR BAR — Bybit Live Gainers -->
+<div style="margin-top:60px;border-bottom:1px solid #e2e8f0;background:#fff;">
+  <!-- Row 1: Top Gainers -->
+  <div style="display:flex;align-items:center;border-bottom:1px solid #f1f5f9;">
+    <span style="font-size:10px;font-weight:700;color:#059669;letter-spacing:0.1em;padding:7px 14px;white-space:nowrap;border-right:1px solid #e2e8f0;background:#ecfdf5;">TOP GAINERS</span>
     <div style="flex:1;overflow:hidden;">
-      <gecko-coin-price-marquee-widget
-        locale="en"
-        outlined="false"
-        coin-ids="bitcoin,ethereum,solana,ripple,binancecoin,cardano,avalanche-2,chainlink,near,injective-protocol"
-        initial-currency="usd"
-        style="width:100%;">
-      </gecko-coin-price-marquee-widget>
+      <marquee id="gainers-marquee" scrollamount="4" style="font-size:11px;font-weight:700;color:#059669;padding:7px 0;">Loading live data...</marquee>
     </div>
-    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#dc2626;color:#fff;padding:5px 14px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;">Full Analysis ↗</a>
+    <a href="https://shield-x-jmgmhr2n8bpzmvcjt3ipsz.streamlit.app/" target="_blank" style="background:#1a56db;color:#fff;padding:6px 14px;text-decoration:none;font-size:11px;font-weight:600;white-space:nowrap;border-left:1px solid #e2e8f0;">Full Analysis ↗</a>
+  </div>
+  <!-- Row 2: Live Prices -->
+  <div style="display:flex;align-items:center;">
+    <span style="font-size:10px;font-weight:700;color:#1a56db;letter-spacing:0.1em;padding:7px 14px;white-space:nowrap;border-right:1px solid #e2e8f0;background:#e8f0fe;">LIVE PRICES</span>
+    <div style="flex:1;overflow:hidden;">
+      <marquee id="prices-marquee" scrollamount="3" direction="right" style="font-size:11px;font-weight:600;color:#1a2f4e;padding:7px 0;">Loading...</marquee>
+    </div>
   </div>
 </div>
-<script src="https://widgets.coingecko.com/gecko-coin-price-marquee-widget.js"></script>
+
+<script>
+const STABLE = new Set(["USDCUSDT","BUSDUSDT","TUSDUSDT","USDPUSDT","DAIUSDT","FDUSDUSDT"]);
+const TOP_PAIRS = ["BTCUSDT","ETHUSDT","SOLUSDT","XRPUSDT","BNBUSDT","ADAUSDT","DOTUSDT","LINKUSDT","AVAXUSDT","NEARUSDT"];
+
+async function loadRadar() {
+  try {
+    // Row 2: Live prices from Bybit
+    const priceRes = await fetch("https://api.bybit.com/v5/market/tickers?category=spot");
+    const priceData = await priceRes.json();
+    const items = priceData?.result?.list || [];
+
+    const priceText = TOP_PAIRS.map(sym => {
+      const coin = items.find(c => c.symbol === sym);
+      if (!coin) return null;
+      const base = sym.replace("USDT","");
+      const price = parseFloat(coin.lastPrice).toLocaleString("en-US", {maximumFractionDigits:4});
+      const chg = parseFloat(coin.price24hPcnt * 100).toFixed(2);
+      const arrow = chg >= 0 ? "▲" : "▼";
+      const color = chg >= 0 ? "#059669" : "#dc2626";
+      return `<span>${base} $${price} <span style="color:${color}">${arrow} ${Math.abs(chg)}%</span></span>`;
+    }).filter(Boolean).join("&nbsp;&nbsp;|&nbsp;&nbsp;");
+    document.getElementById("prices-marquee").innerHTML = priceText || "Loading...";
+
+    // Row 1: Top gainers from Bybit linear (futures)
+    const futRes = await fetch("https://api.bybit.com/v5/market/tickers?category=linear");
+    const futData = await futRes.json();
+    const futures = (futData?.result?.list || [])
+      .filter(c => c.symbol.endsWith("USDT") && !STABLE.has(c.symbol))
+      .map(c => ({ sym: c.symbol.replace("USDT",""), chg: parseFloat(c.price24hPcnt) * 100 }))
+      .filter(c => c.chg >= 10)
+      .sort((a,b) => b.chg - a.chg)
+      .slice(0, 20);
+
+    if (futures.length > 0) {
+      const gainText = futures.map(c =>
+        `<span style="color:#059669">${c.sym} +${c.chg.toFixed(2)}%</span>`
+      ).join("&nbsp;&nbsp;|&nbsp;&nbsp;");
+      document.getElementById("gainers-marquee").innerHTML = "🚀 " + gainText;
+    } else {
+      document.getElementById("gainers-marquee").innerHTML = "Market calm — No 10%+ movers right now";
+    }
+  } catch(e) {
+    document.getElementById("gainers-marquee").innerHTML = "Live data unavailable";
+    document.getElementById("prices-marquee").innerHTML = "Live data unavailable";
+  }
+}
+
+loadRadar();
+setInterval(loadRadar, 30000); // refresh every 30s
+</script>
 
 <!-- HERO -->
 <div style="background:#fff;border-bottom:1px solid var(--border);">
