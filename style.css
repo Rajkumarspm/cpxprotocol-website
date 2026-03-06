@@ -57,7 +57,7 @@ nav {
   font-size: 18px; font-weight: 700;
   color: var(--navy); text-decoration: none; letter-spacing: -0.3px;
 }
-.nav-logo span { color: var(--blue); }
+.nav-logo span:not(.logo-cp):not(.logo-x) { color: var(--blue); }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a {
   color: var(--muted); text-decoration: none;
