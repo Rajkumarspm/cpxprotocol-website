@@ -281,3 +281,19 @@ footer {
   .form-row { grid-template-columns: 1fr; }
   footer { padding: 32px 20px 20px; }
 }
+
+/* === CPX LOGO === */
+.logo-cp {
+  color: #345D95;
+  font-weight: 900;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: -0.5px;
+}
+.logo-x {
+  color: #4CBC50;
+  font-weight: 900;
+  font-size: 20px;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: -0.5px;
+}
